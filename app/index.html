@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>项目管理系统 · 作战驾驶舱</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== 背景装饰层（z-index:0，不拦截鼠标） ===== -->
+<div class="bg-layer" aria-hidden="true">
+  <div class="fire-band fire-a"></div>
+  <div class="fire-band fire-b"></div>
+  <canvas id="particleCanvas" class="particle-canvas"></canvas>
+  <div class="grid-floor"></div>
+</div>
+
+<!-- ===== 顶栏 ===== -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark icon-3d">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M12 2.6 21 7.5v9L12 21.4 3 16.5v-9L12 2.6Z"/>
+        <path d="M12 2.6v9.1l9 4.8"/>
+        <path d="M12 11.7 3 16.5"/>
+      </svg>
+    </span>
+    <span class="brand-name">项目管理系统</span>
+  </div>
+
+  <div class="project-switch">
+    <select id="projectSelect" class="select" aria-label="切换项目"></select>
+    <button type="button" class="btn btn-ghost btn-sm" id="btnNewProjectTop">+ 新建项目</button>
+  </div>
+
+  <div class="topbar-right">
+    <div class="global-search" id="globalSearch">
+      <label class="search-box gs-box">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round">
+          <circle cx="11" cy="11" r="6.4"/><path d="M16 16l4 4"/>
+        </svg>
+        <input type="text" id="globalSearchInput" autocomplete="off"
+               placeholder="搜索任务 / 需求 / 缺陷" aria-label="全局搜索" />
+        <kbd class="gs-kbd">/</kbd>
+      </label>
+      <div class="gs-results" id="gsResults" hidden></div>
+    </div>
+    <div class="health-chip" id="healthChip" title="当前项目健康度">
+      <span class="lamp lamp-gray" id="healthLamp"></span>
+      <span id="healthText">未选择项目</span>
+    </div>
+    <div class="countdown" id="countdown">距上线 — 天</div>
+  </div>
+</header>
+
+<!-- ===== 左侧透视图标导航（由 app.js 渲染 8 项） ===== -->
+<nav class="sidenav" id="sidenav" aria-label="主导航"></nav>
+
+<!-- ===== 主内容区 ===== -->
+<main class="main" id="main">
+  <div class="view" id="view"></div>
+</main>
+
+<!-- ===== 底部状态条 ===== -->
+<footer class="statusbar">
+  <span id="statusTime">数据更新时间 —</span>
+  <span class="status-dot"></span>
+  <span id="statusProject">当前项目 —</span>
+  <span class="status-spacer"></span>
+  <span id="statusHint">Esc 关闭弹窗 · / 全局搜索</span>
+  <button type="button" class="status-refresh" id="btnRefresh" title="刷新数据（重算指标并重渲染）">
+    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"
+         stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 11A8 8 0 0 0 6.6 6.6L4 9"/><path d="M4 4v5h5"/>
+      <path d="M4 13a8 8 0 0 0 13.4 4.4L20 15"/><path d="M20 20v-5h-5"/>
+    </svg>
+    刷新
+  </button>
+</footer>
+
+<!-- ===== 全局浮层提示 ===== -->
+<div class="tip" id="tip" hidden></div>
+
+<!-- ===== Toast 容器 ===== -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- ===== 通用弹窗（表单 / 二次确认共用） ===== -->
+<div class="modal-mask" id="modalMask" hidden>
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <h3 class="panel-title" id="modalTitle">标题</h3>
+      <button type="button" class="btn-icon" id="modalClose" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+
+<!-- 顺序加载，禁止 type="module"（file:// 会被 CORS 拦截） -->
+<script src="js/store.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/views.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
